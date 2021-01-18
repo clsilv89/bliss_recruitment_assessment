@@ -1,5 +1,6 @@
 package com.caio.bliss.ui.viewModel
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.caio.bliss.R
