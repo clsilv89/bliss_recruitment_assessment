@@ -3,7 +3,6 @@ package com.caio.bliss.data.repository
 import com.caio.bliss.data.api.Api
 import com.caio.bliss.data.network.NetWorkHelp
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class Repository(private val api: Api) {
 

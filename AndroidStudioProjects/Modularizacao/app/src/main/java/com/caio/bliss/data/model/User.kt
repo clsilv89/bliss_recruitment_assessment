@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity
-data class User (
+data class User(
     val login: String,
     @PrimaryKey(autoGenerate = true)
     var id: Long,
