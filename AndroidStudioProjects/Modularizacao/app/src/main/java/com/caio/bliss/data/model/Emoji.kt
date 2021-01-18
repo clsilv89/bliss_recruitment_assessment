@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity
-data class Emoji (
+data class Emoji(
     @PrimaryKey(autoGenerate = false)
     val name: String,
     val url: String

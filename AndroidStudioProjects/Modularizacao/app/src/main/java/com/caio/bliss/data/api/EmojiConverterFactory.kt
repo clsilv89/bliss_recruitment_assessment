@@ -7,7 +7,6 @@ import com.google.gson.JsonElement
 import org.json.JSONObject
 import java.lang.reflect.Type
 
-
 class EmojiConverterFactory : JsonDeserializer<List<Emoji>> {
     override fun deserialize(
         json: JsonElement?,
