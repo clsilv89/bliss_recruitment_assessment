@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Emoji Fetcher</string>
+    <string name="random_emoji_btn">random emoji</string>
+    <string name="emoji_list_btn">emoji list</string>
+    <string name="list_repos_btn">google repos</string>
+
+    <string name="title_activity_module">ModuleActivity</string>
+
+    <string name="main_load_content_error">Ocorreu um problema, tente novamente</string>
+    <string name="main_load_image_error">Erro ao carregar imagem: %1$s</string>
+    <string name="status_label_search_user">Preencha o campo</string>
+</resources>

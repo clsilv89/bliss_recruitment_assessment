@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.caio.bliss.ui.viewModel.MainActivityViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_blue"
+        tools:context=".ui.MainActivity">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="150dp"
+            android:background="@color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/image_view_bg" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/randomEmojiBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:onClick="@{(v) -> viewModel.onClick(v)}"
+            android:text="@string/random_emoji_btn"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toEndOf="@id/imageView"
+            app:layout_constraintStart_toStartOf="@id/imageView"
+            app:layout_constraintTop_toBottomOf="@id/imageView" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/emojiListBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="@{(v) -> viewModel.onClick(v)}"
+            android:text="@string/emoji_list_btn"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toEndOf="@id/randomEmojiBtn"
+            app:layout_constraintStart_toStartOf="@id/randomEmojiBtn"
+            app:layout_constraintTop_toBottomOf="@id/randomEmojiBtn" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/searchUserLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="@id/imageView"
+            app:layout_constraintStart_toStartOf="@id/imageView"
+            app:layout_constraintTop_toBottomOf="@id/emojiListBtn">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameInputLayout"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/usernameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:textColor="@color/pink_textinput"
+                    android:textAlignment="center"
+                    tools:text="@string/emoji_list_btn"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/searchUserBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toTopOf="@id/usernameInputLayout"
+                app:layout_constraintBottom_toBottomOf="@id/usernameInputLayout"
+                app:layout_constraintStart_toEndOf="@id/usernameInputLayout"
+                android:onClick="@{(v) -> viewModel.onClick(v)}"
+                android:src="@drawable/ic_search"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/listReposBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="@{(v) -> viewModel.onClick(v)}"
+            android:text="@string/list_repos_btn"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toEndOf="@id/randomEmojiBtn"
+            app:layout_constraintStart_toStartOf="@id/randomEmojiBtn"
+            app:layout_constraintTop_toBottomOf="@id/searchUserLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
