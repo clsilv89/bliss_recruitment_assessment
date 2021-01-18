@@ -14,6 +14,7 @@ import com.caio.bliss.application.MyApplication
 import com.caio.bliss.data.model.Repo
 import com.caio.bliss.ui.recyclerview.ReposListAdapter
 import com.caio.bliss.ui.viewModel.ListReposActvityViewModel
+import com.caio.bliss.util.showSnackbar
 import kotlinx.android.synthetic.main.activity_list_repos.*
 import org.koin.core.parameter.parametersOf
 
@@ -34,7 +35,6 @@ class ListReposActivity : AppCompatActivity() {
         parametersOf(this)
     }
     private var rvAdapter: ReposListAdapter? = null
-    var page = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +55,7 @@ class ListReposActivity : AppCompatActivity() {
             error().observe(this@ListReposActivity, Observer {
                 it?.let {
                     if (it) {
-                        Toast.makeText(
-                            this@ListReposActivity,
-                            getString(R.string.main_load_content_error), Toast.LENGTH_LONG
-                        ).show()
+                        showSnackbar(R.string.main_load_content_error, Toast.LENGTH_LONG)
                     }
                 }
             })
@@ -66,6 +63,7 @@ class ListReposActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
+        var page = 1
         repoList?.let { list ->
             rvAdapter = ReposListAdapter(list)
             reposRv.apply {
@@ -80,12 +78,12 @@ class ListReposActivity : AppCompatActivity() {
                         if (visibleItemCount != null && pastVisiblesItems != null) {
                             if (visibleItemCount + pastVisiblesItems >= totalItemCount!!) {
                                 viewModel.getMoreRepos(page)
+                                page += 1
                             }
                         }
                     }
                 })
             }
-            page += 1
         }
     }
 }

@@ -16,6 +16,7 @@ import com.caio.bliss.data.model.Emoji
 import com.caio.bliss.ui.recyclerview.ItemClickListener
 import com.caio.bliss.ui.recyclerview.EmojiListAdapter
 import com.caio.bliss.ui.viewModel.ListEmojiViewModel
+import com.caio.bliss.util.showSnackbar
 import kotlinx.android.synthetic.main.list_emoji_activity.*
 import org.koin.core.parameter.parametersOf
 
@@ -73,11 +74,7 @@ class ListEmojiActivity : AppCompatActivity(), OnRefreshListener {
         viewModel.error().observe(this, Observer {
             it.let {
                 if (it) {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.main_load_content_error),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showSnackbar(R.string.main_load_content_error, Toast.LENGTH_LONG)
                 }
             }
         })

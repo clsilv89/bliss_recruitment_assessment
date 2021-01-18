@@ -22,13 +22,14 @@ class ListReposActvityViewModel(private val repository: Repository) : ViewModel(
     fun getMoreRepos(page: Int) = runBlocking {
         launch {
             try {
-                when (val response = repository.getMoreRepos("google", page)) {
+                when (val response = repository.getRepos("google", page)) {
                     is NetworkError -> error.value = true
                     is GenericError -> error.value = true
                     is Success<List<Repo>> -> repoResponse.value = response.value
                 }
             } catch (e: Exception) {
                 error.value
+            } finally {
             }
         }
     }

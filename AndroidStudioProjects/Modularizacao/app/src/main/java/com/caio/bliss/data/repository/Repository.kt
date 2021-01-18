@@ -18,6 +18,6 @@ class Repository(private val api: Api) {
     suspend fun getRepos(org: String) =
         NetWorkHelp.safeApiCall(dispatcher) { api.getRepos(org) }
 
-    suspend fun getMoreRepos(org: String, page: Int) =
+    suspend fun getRepos(org: String, page: Int) =
         NetWorkHelp.safeApiCall(dispatcher) { api.getRepos(org, page) }
 }
