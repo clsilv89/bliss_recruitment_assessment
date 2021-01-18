@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
                 it?.let {
                     this@MainActivity.emojiList = it
                     for (i in this@MainActivity.emojiList) {
-                        emojiDatabase?.emojiDAO()?.add(i)
+                        viewModel.insertEmojiDB(i)
                     }
                 }
             })
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
             })
             userResponse().observe(this@MainActivity, Observer {
                 it?.let {
-                    userDatabase?.userDAO()?.add(it)
+                    viewModel.insertUserDB(it)
                     fetchUserListAndOpenAvatarScreen()
                 }
             })

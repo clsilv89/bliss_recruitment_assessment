@@ -1,10 +1,14 @@
 package com.caio.bliss.ui.viewModel
 
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.caio.bliss.R
+import com.caio.bliss.application.MyApplication
+import com.caio.bliss.application.MyApplication.Companion
+import com.caio.bliss.application.MyApplication.Companion.emojiDatabase
 import com.caio.bliss.application.MyApplication.Companion.userDatabase
 import com.caio.bliss.data.model.Emoji
 import com.caio.bliss.data.model.Repo
@@ -17,7 +21,7 @@ import com.caio.bliss.util.custom.getViewId
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class MainActivityViewModel(private val repository: Repository): ViewModel() {
+class MainActivityViewModel(private val repository: Repository) : ViewModel() {
     private var emojiResponse = MutableLiveData<List<Emoji>>()
     fun emojiResponse(): LiveData<List<Emoji>> = emojiResponse
 
@@ -31,17 +35,17 @@ class MainActivityViewModel(private val repository: Repository): ViewModel() {
     fun statusLabel(): LiveData<Int> = statusLabel
 
     private var goList = MutableLiveData<Boolean>().apply { value = false }
+    fun goList(): LiveData<Boolean> = goList
 
     private var userResponse = MutableLiveData<User>()
     fun userResponse(): LiveData<User> = userResponse
 
-    var userName = MutableLiveData<String>()
-    fun goList(): LiveData<Boolean> = goList
-
-    var emojiList = MutableLiveData<List<Emoji>>()
-
     private var repoResponse = MutableLiveData<List<Repo>>()
     fun repoResponse(): LiveData<List<Repo>> = repoResponse
+
+    var userName = MutableLiveData<String>()
+
+    var emojiList = MutableLiveData<List<Emoji>>()
 
     fun getEmojis() = runBlocking {
         launch {
@@ -57,10 +61,8 @@ class MainActivityViewModel(private val repository: Repository): ViewModel() {
         }
     }
 
-    private fun getUser() = runBlocking {
-        val userList = userDatabase?.userDAO()?.all()
-        val filter = userList?.filter { user -> user.login == userName.value.orEmpty() }
-        if(userName.value.isNullOrEmpty()) {
+    fun getUser(filter: List<User>) = runBlocking {
+        if (userName.value.isNullOrEmpty()) {
             statusLabel.value = R.string.status_label_search_user
         } else if (!filter.isNullOrEmpty()) {
             userResponse.postValue(filter.first())
@@ -79,7 +81,16 @@ class MainActivityViewModel(private val repository: Repository): ViewModel() {
         }
     }
 
-    private fun getRepos() = runBlocking {
+
+    fun insertEmojiDB(emoji: Emoji) {
+        emojiDatabase?.emojiDAO()?.add(emoji)
+    }
+
+    fun insertUserDB(user: User) {
+        userDatabase?.userDAO()?.add(user)
+    }
+
+    fun getRepos() = runBlocking {
         launch {
             try {
                 when (val response = repository.getRepos("google")) {
@@ -97,7 +108,13 @@ class MainActivityViewModel(private val repository: Repository): ViewModel() {
         when (view.getViewId()) {
             "emojiListBtn" -> goList.value = true
             "randomEmojiBtn" -> randomEmoji.value = emojiList.value?.random()
-            "searchUserBtn" -> getUser()
+            "searchUserBtn" -> {
+                val userList = userDatabase?.userDAO()?.all()
+                val filter = userList?.filter { user -> user.login == userName.value.orEmpty() }
+                filter?.let {
+                    getUser(it)
+                }
+            }
             "listReposBtn" -> getRepos()
         }
     }
