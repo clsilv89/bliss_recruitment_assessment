@@ -3,7 +3,6 @@ package com.caio.bliss.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -35,6 +34,7 @@ class ListReposActivity : AppCompatActivity() {
         parametersOf(this)
     }
     private var rvAdapter: ReposListAdapter? = null
+    var page = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +50,6 @@ class ListReposActivity : AppCompatActivity() {
                 it?.let {
                     repoList?.addAll(it)
                     rvAdapter?.notifyDataSetChanged()
-                    Log.d("Caio", repoList?.size.toString())
                 }
             })
             error().observe(this@ListReposActivity, Observer {
@@ -67,7 +66,6 @@ class ListReposActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        var page = 1
         repoList?.let { list ->
             rvAdapter = ReposListAdapter(list)
             reposRv.apply {
