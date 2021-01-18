@@ -20,6 +20,7 @@ import com.caio.bliss.databinding.ActivityMainBinding
 import com.caio.bliss.ui.recyclerview.ItemClickListener
 import com.caio.bliss.ui.viewModel.MainActivityViewModel
 import com.caio.bliss.util.loadImageWithUrl
+import com.caio.bliss.util.showSnackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.core.parameter.parametersOf
 
@@ -91,15 +92,14 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
                 }
             })
             repoResponse().observe(this@MainActivity, Observer {
-                openReposList(it)
+                it?.let {
+                    openReposList(it)
+                }
             })
             error().observe(this@MainActivity, Observer {
                 it?.let {
                     if (it) {
-                        Toast.makeText(
-                            this@MainActivity,
-                            getString(R.string.main_load_content_error), Toast.LENGTH_LONG
-                        ).show()
+                        showSnackbar(R.string.main_load_content_error, Toast.LENGTH_LONG)
                     }
                 }
             })
