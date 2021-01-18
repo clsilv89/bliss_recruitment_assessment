@@ -43,8 +43,7 @@ object RestConfig {
     private fun Retrofit.Builder.extras(): Retrofit.Builder {
         val listType: Type = object : TypeToken<MutableList<Emoji>>() {}.type
         val gsonEmojiDeserializer = GsonBuilder()
-            .registerTypeAdapter(
-                listType,
+            .registerTypeAdapter(listType,
                 EmojiConverterFactory()
             )
             .create()
@@ -71,10 +70,7 @@ object RestConfig {
         return this
     }
 
-    suspend fun <T> safeApiCall(
-        dispatcher: CoroutineDispatcher,
-        apiCall: suspend () -> T
-    ): ResultWrapper<T> {
+    suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher, apiCall: suspend () -> T): ResultWrapper<T> {
         return withContext(dispatcher) {
             try {
                 ResultWrapper.Success(apiCall.invoke())

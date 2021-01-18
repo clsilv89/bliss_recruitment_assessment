@@ -7,7 +7,8 @@ import com.caio.bliss.data.model.Repo
 import com.caio.bliss.databinding.ReposItemBinding
 import com.caio.bliss.ui.recyclerview.ReposListAdapter.MyViewHolder
 
-class ReposListAdapter(private val repos: List<Repo>) : RecyclerView.Adapter<MyViewHolder>() {
+class ReposListAdapter(private val repos: List<Repo>)
+    : RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)

@@ -8,10 +8,9 @@ import com.caio.bliss.databinding.EmojiItemRvBinding
 import com.caio.bliss.ui.recyclerview.EmojiListAdapter.MyViewHolder
 import com.caio.bliss.util.loadImageWithUrl
 
-class EmojiListAdapter(
-    private val emojis: ArrayList<Emoji>,
-    private val listener: ItemClickListener? = null
-) : RecyclerView.Adapter<MyViewHolder>() {
+class EmojiListAdapter(private val emojis: ArrayList<Emoji>,
+                       private val listener: ItemClickListener? = null)
+    : RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

@@ -26,16 +26,14 @@ class MyApplication : Application(), CustomKoinComponent {
         emojiDatabase = Room.databaseBuilder(
             this,
             EmojiDatabase::class.java,
-            "emoji-list-database"
-        )
+            "emoji-list-database")
             .allowMainThreadQueries()
             .build()
 
         userDatabase = Room.databaseBuilder(
             this,
             UserDatabase::class.java,
-            "user-list-database"
-        )
+            "user-list-database")
             .allowMainThreadQueries()
             .build()
 

@@ -1,10 +1,13 @@
 package com.caio.bliss.ui.viewModel
 
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.caio.bliss.R
+import com.caio.bliss.application.MyApplication
+import com.caio.bliss.application.MyApplication.Companion
 import com.caio.bliss.application.MyApplication.Companion.emojiDatabase
 import com.caio.bliss.application.MyApplication.Companion.userDatabase
 import com.caio.bliss.data.model.Emoji
