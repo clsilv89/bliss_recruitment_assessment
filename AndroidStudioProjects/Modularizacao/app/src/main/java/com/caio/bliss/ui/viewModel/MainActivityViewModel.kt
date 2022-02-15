@@ -13,66 +13,64 @@ import com.caio.bliss.data.model.User
 import com.caio.bliss.data.network.ResultWrapper.GenericError
 import com.caio.bliss.data.network.ResultWrapper.NetworkError
 import com.caio.bliss.data.network.ResultWrapper.Success
-import com.caio.bliss.data.repository.Repository
+import com.caio.bliss.usecases.IGetEmojiUseCase
+import com.caio.bliss.usecases.IGetReposUseCase
+import com.caio.bliss.usecases.IGetUserUseCase
 import com.caio.bliss.util.custom.getViewId
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class MainActivityViewModel(private val repository: Repository) : ViewModel() {
-    private var emojiResponse = MutableLiveData<List<Emoji>>()
-    fun emojiResponse(): LiveData<List<Emoji>> = emojiResponse
-
-    private var error = MutableLiveData<Boolean>().apply { value = false }
-    fun error(): LiveData<Boolean> = error
-
-    private var randomEmoji = MutableLiveData<Emoji>()
-    fun randomEmoji(): LiveData<Emoji> = randomEmoji
-
-    private val statusLabel = MutableLiveData<Int>()
-    fun statusLabel(): LiveData<Int> = statusLabel
-
-    private var goList = MutableLiveData<Boolean>().apply { value = false }
-    fun goList(): LiveData<Boolean> = goList
-
-    private var userResponse = MutableLiveData<User>()
-    fun userResponse(): LiveData<User> = userResponse
-
-    private var repoResponse = MutableLiveData<List<Repo>>()
-    fun repoResponse(): LiveData<List<Repo>> = repoResponse
-
+class MainActivityViewModel(
+    private val getEmojiUseCase: IGetEmojiUseCase,
+    private val getUserUseCase: IGetUserUseCase,
+    private val getReposUseCase: IGetReposUseCase
+) : ViewModel() {
+    private var _emojiResponse = MutableLiveData<List<Emoji>>()
+    val emojiResponse: LiveData<List<Emoji>> get() = _emojiResponse
+    private var _error = MutableLiveData<Boolean>().apply { value = false }
+    val error: LiveData<Boolean> get() = _error
+    private var _randomEmoji = MutableLiveData<Emoji>()
+    val randomEmoji: LiveData<Emoji> get() = _randomEmoji
+    private val _statusLabel = MutableLiveData<Int>()
+    val statusLabel: LiveData<Int> get() = _statusLabel
+    private var _goList = MutableLiveData<Boolean>().apply { value = false }
+    val goList: LiveData<Boolean> get() = _goList
+    private var _userResponse = MutableLiveData<User>()
+    val userResponse: LiveData<User> get() = _userResponse
+    private var _repoResponse = MutableLiveData<List<Repo>>()
+    val repoResponse: LiveData<List<Repo>> get() = _repoResponse
     var userName = MutableLiveData<String>()
-
     var emojiList = MutableLiveData<List<Emoji>>()
 
     fun getEmojis() = runBlocking {
         launch {
             try {
-                when (val response = repository.getEmojis()) {
-                    is NetworkError -> statusLabel.value = R.string.main_load_content_error
-                    is GenericError -> statusLabel.value = R.string.main_load_content_error
-                    is Success<List<Emoji>> -> emojiResponse.value = response.value
+                when (val response = getEmojiUseCase.invoke()) {
+                    is NetworkError -> _statusLabel.value = R.string.main_load_content_error
+                    is GenericError -> _statusLabel.value = R.string.main_load_content_error
+                    is Success<List<Emoji>> -> _emojiResponse.value = response.value
                 }
             } catch (e: Exception) {
-                error.value
+                _error.value
             }
         }
     }
 
     fun getUser(filter: List<User>) = runBlocking {
         if (userName.value.isNullOrEmpty()) {
-            statusLabel.value = R.string.status_label_search_user
+            _statusLabel.value = R.string.status_label_search_user
         } else if (!filter.isNullOrEmpty()) {
-            userResponse.postValue(filter.first())
+            _userResponse.postValue(filter.first())
         } else {
             launch {
                 try {
-                    when (val response = repository.getUser(userName.value.orEmpty())) {
-                        is NetworkError -> statusLabel.value = R.string.main_load_content_error
-                        is GenericError -> statusLabel.value = R.string.main_load_content_error
-                        is Success<User> -> userResponse.value = response.value
+                    when (val response = getUserUseCase.invoke(userName.value.orEmpty())) {
+                        is NetworkError -> _statusLabel.value = R.string.main_load_content_error
+                        is GenericError -> _statusLabel.value = R.string.main_load_content_error
+                        is Success<User> -> _userResponse.value = response.value
                     }
                 } catch (e: Exception) {
-                    error.value
+                    _error.value
                 }
             }
         }
@@ -90,21 +88,21 @@ class MainActivityViewModel(private val repository: Repository) : ViewModel() {
     fun getRepos() = runBlocking {
         launch {
             try {
-                when (val response = repository.getRepos("google")) {
-                    is NetworkError -> statusLabel.value = R.string.main_load_content_error
-                    is GenericError -> statusLabel.value = R.string.main_load_content_error
-                    is Success<List<Repo>> -> repoResponse.value = response.value
+                when (val response = getReposUseCase.invoke("google")) {
+                    is NetworkError -> _statusLabel.value = R.string.main_load_content_error
+                    is GenericError -> _statusLabel.value = R.string.main_load_content_error
+                    is Success<List<Repo>> -> _repoResponse.value = response.value
                 }
             } catch (e: Exception) {
-                error.value
+                _error.value
             }
         }
     }
 
     fun onClick(view: View) {
         when (view.getViewId()) {
-            "emojiListBtn" -> goList.value = true
-            "randomEmojiBtn" -> randomEmoji.value = emojiList.value?.random()
+            "emojiListBtn" -> _goList.value = true
+            "randomEmojiBtn" -> _randomEmoji.value = emojiList.value?.random()
             "searchUserBtn" -> {
                 val userList = userDatabase?.userDAO()?.all()
                 val filter = userList?.filter { user -> user.login == userName.value.orEmpty() }

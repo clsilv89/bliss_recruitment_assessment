@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
 
     private fun setupObservers() {
         viewModel.run {
-            emojiResponse().observe(this@MainActivity, Observer {
+            emojiResponse.observe(this@MainActivity, Observer {
                 it?.let {
                     this@MainActivity.emojiList = it
                     for (i in this@MainActivity.emojiList) {
@@ -68,35 +68,35 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
                     }
                 }
             })
-            randomEmoji().observe(this@MainActivity, Observer {
+            randomEmoji.observe(this@MainActivity, Observer {
                 it?.let {
                     imageView.loadImageWithUrl(it.url)
                 }
             })
-            goList().observe(this@MainActivity, Observer {
+            goList.observe(this@MainActivity, Observer {
                 it?.let {
                     if (it) {
                         goEmojiList()
                     }
                 }
             })
-            userResponse().observe(this@MainActivity, Observer {
+            userResponse.observe(this@MainActivity, Observer {
                 it?.let {
                     viewModel.insertUserDB(it)
                     fetchUserListAndOpenAvatarScreen()
                 }
             })
-            statusLabel().observe(this@MainActivity, Observer {
+            statusLabel.observe(this@MainActivity, Observer {
                 it?.let {
                     usernameEditText.error = getString(it)
                 }
             })
-            repoResponse().observe(this@MainActivity, Observer {
+            repoResponse.observe(this@MainActivity, Observer {
                 it?.let {
                     openReposList(it)
                 }
             })
-            error().observe(this@MainActivity, Observer {
+            error.observe(this@MainActivity, Observer {
                 it?.let {
                     if (it) {
                         showSnackbar(R.string.main_load_content_error, Toast.LENGTH_LONG)

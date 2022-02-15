@@ -1,20 +1,14 @@
 package com.caio.bliss.data.network
 
-import com.caio.bliss.data.model.Emoji
 import com.caio.bliss.data.api.EmojiConverterFactory
-import com.caio.bliss.data.model.ErrorResponse
+import com.caio.bliss.data.model.Emoji
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.squareup.moshi.Moshi
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
@@ -69,42 +63,5 @@ object RestConfig {
         }
         addInterceptor(logging)
         return this
-    }
-
-    suspend fun <T> safeApiCall(
-        dispatcher: CoroutineDispatcher,
-        apiCall: suspend () -> T
-    ): ResultWrapper<T> {
-        return withContext(dispatcher) {
-            try {
-                ResultWrapper.Success(apiCall.invoke())
-            } catch (throwable: Throwable) {
-                when (throwable) {
-                    is IOException -> ResultWrapper.NetworkError
-                    is HttpException -> {
-                        val code = throwable.code()
-                        val errorResponse =
-                            convertErrorBody(
-                                throwable
-                            )
-                        ResultWrapper.GenericError(code, errorResponse)
-                    }
-                    else -> {
-                        ResultWrapper.GenericError(null, null)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun convertErrorBody(throwable: HttpException): ErrorResponse? {
-        return try {
-            throwable.response()?.errorBody()?.source()?.let {
-                val moshiAdapter = Moshi.Builder().build().adapter(ErrorResponse::class.java)
-                moshiAdapter.fromJson(it)
-            }
-        } catch (exception: Exception) {
-            null
-        }
     }
 }

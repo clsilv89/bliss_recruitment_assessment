@@ -8,14 +8,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {
-    companion object {
-        private const val EMOJIS = "/emojis"
-        private const val USER = "/users/{name}"
-        private const val REPOS = "/users/{org}/repos"
-    }
-
     @GET(EMOJIS)
-    suspend fun getEmojis(): List<Emoji>
+    suspend fun
+            getEmojis(): List<Emoji>
 
     @GET(USER)
     suspend fun getUser(
@@ -24,12 +19,13 @@ interface Api {
 
     @GET(REPOS)
     suspend fun getRepos(
-        @Path("org") org: String
-    ): List<Repo>
-
-    @GET(REPOS)
-    suspend fun getRepos(
         @Path("org") org: String,
         @Query("page") page: Int
     ): List<Repo>
+
+    companion object {
+        private const val EMOJIS = "/emojis"
+        private const val USER = "/users/{name}"
+        private const val REPOS = "/users/{org}/repos"
+    }
 }

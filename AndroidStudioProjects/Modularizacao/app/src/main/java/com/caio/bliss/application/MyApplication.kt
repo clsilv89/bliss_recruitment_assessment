@@ -44,7 +44,5 @@ class MyApplication : Application(), CustomKoinComponent {
 
     private fun startKoin(context: Context) {
         KoinContext.start(this)
-
     }
-
 }
